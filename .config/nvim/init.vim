@@ -1,8 +1,19 @@
+"--------------------------------------------- Initial setup ----------------------------------------
+":PlugInstall           Install plugins
+"Install nodejs
+":CocInstall coc-yaml   Install language server autocompletion for yaml
+":CocInstall coc-json   Install language server autocompletion for json
 
-" Terminal color support
-set t_Co=256
 
-" ======================================== PLUGINS =======================================
+
+"-------------------------------------------- Starting settings -------------------------------------
+
+set t_Co=256            "Terminal color support
+filetype plugin on      "Different settings for different file types, living in ~/.vim/after/ftplugin/{filetype}.vim
+
+
+
+"------------------------------------------------ Plugins -------------------------------------------
 call plug#begin()
 " The default plugin directory will be as follows:
 "   - Vim (Linux/macOS): '~/.vim/plugged'
@@ -12,25 +23,32 @@ call plug#begin()
 "   - e.g. `call plug#begin('~/.vim/plugged')`
 "   - Avoid using standard Vim directory names like 'plugin'
 
-Plug 'tanvirtin/monokai.nvim' 		    "Color scheme
-Plug 'preservim/nerdtree'               "File explorer
-Plug 'mhinz/vim-signify'                "Margin style for vcs modified files
-Plug 'tpope/vim-fugitive'               "Git goodies
-Plug 'vim-airline/vim-airline'          "Status line
-Plug 'vim-airline/vim-airline-themes'   "Status line themes
-Plug 'vim-syntastic/syntastic'          "Syntax checking
+Plug 'tanvirtin/monokai.nvim' 		            "Color scheme
+Plug 'preservim/nerdtree'                       "File explorer
+Plug 'mhinz/vim-signify'                        "Margin style for vcs modified files
+Plug 'tpope/vim-fugitive'                       "Git goodies
+Plug 'vim-airline/vim-airline'                  "Status line
+Plug 'vim-airline/vim-airline-themes'           "Status line themes
+Plug 'vim-syntastic/syntastic'                  "Syntax checking
+Plug 'neoclide/coc.nvim', {'branch': 'release'} "Language server client, used for autocompletion. :CocConfig
+Plug 'andrewstuart/vim-kubernetes'              "Kube commands
 
 " Initialize plugin system
 call plug#end()
 
-" ===================================== END PLUGINS ======================================
 
 
+"------------------------------------------------ Colors -------------------------------------------
+set background=dark
+colorscheme monokai
+let g:airline_theme='deus'
 
-" ======================================= BASIC ==========================================
+
+"------------------------------------------------ Common -------------------------------------------
 syntax on
 set encoding=utf-8
 set nobreakindent   	"Don't break lines automatically
+set tw=0                "Don't break lines automatically
 set nowrap
 set sidescroll=1
 set sidescrolloff=50
@@ -39,66 +57,32 @@ set showcmd
 set hidden
 " Show autocomplete options
 set wildmenu
+set wildignore+=*/.git/*,*/.hg/*,*/.svn/*,*/.idea/*,*/.DS_Store,*/node_modules/*,*/target/*,*/*.jar,*/*.class,*/*.zip,*/*.tar,*/*.gz,*/*.war,*/bower_components/*,*/dist/*
 set completeopt=longest,preview,menuone
 set cursorline
-set ttyfast
 set ruler
-"set relativenumber
 set number
-" Highlight search matches
+" Search settings
 set hlsearch
 set incsearch
 set smartcase
-set wildignore+=*/.git/*,*/.hg/*,*/.svn/*,*/.idea/*,*/.DS_Store,*/node_modules/*,*/target/*,*/*.jar,*/*.class,*/*.zip,*/*.tar,*/*.gz,*/*.war,*/bower_components/*,*/dist/*
+set ignorecase
 set foldmethod=indent
 set foldnestmax=10
 set nofoldenable
 set foldlevel=2
-set pastetoggle=<F3>
 set so=999
-set backupdir=~/.vim/backup//
-set directory=~/.vim/swap//
-" Write all changes when leaving buffer
-set autowriteall
+set backupdir=~/.config/nvim/backup//
+set directory=~~/.config/nvim/swap//
+set autowriteall " Write all changes when leaving buffer
 set path+=**
-set tags=./tags;
-"set synmaxcol=120
-set background=dark
-
-colorscheme monokai
-let g:airline_theme='deus'
-
+" Default tab handling
 set tabstop=4
 set softtabstop=4
 set shiftwidth=4
 set expandtab
-set autoindent
 
-" Tab 4
-au FileType python,java
-    \ setlocal tabstop=4
-    \| setlocal softtabstop=4
-    \| setlocal shiftwidth=4
-    \| setlocal textwidth=79
-    \| setlocal expandtab
-    \| setlocal autoindent
-    \| setlocal fileformat=unix
-
-" Tab 2
-au FileType html,css,js
-    \ setlocal tabstop=2
-    \| setlocal shiftwidth=2
-    \| setlocal expandtab
-    \| setlocal autoindent
-
-
-" Highlight bad whitespaces
-highlight BadWhitespace ctermbg=red guibg=darkred
-au BufRead,BufNewFile *.py,*.pyw,*.c,*.h match BadWhitespace /\s\+$/
-let python_highlight_all=1
-
-
-" Custom bindings
+"------------------------------------------------ Custom keybindings -------------------------------------------
 let mapleader="\<Space>"
 " Hide search highlights
 nnoremap <leader>, :noh<CR>
@@ -109,34 +93,60 @@ nnoremap <Leader>l :syntax off<CR> gg=G :syntax on<CR>
 "" Go back to previous buffer
 nnoremap <Leader>6 :b#<CR>
 
-"" au FileType xml nnoremap <Leader>l :%s/&lt;/</g<CR> :%s/&gt;/>/g<CR> :%s/></>\r</g<CR> :syntax off<CR> gg=G :syntax on<CR>
-au FileType xml nnoremap <Leader>l :%s/></>\r</g<CR> :syntax off<CR> gg=G :syntax on<CR>
-au FileType json setlocal equalprg=python\ -m\ json.tool\ 2>/dev/null
-
-
 " Remember last position in file
 if has("autocmd")
     au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
 endif
 
 
-" NERDTree configuration
+"------------------------------------------------ Plugin config -----------------------------------------------
+" NERDTree
 let NERDTreeWinSize=45
 nnoremap <F1> :NERDTreeToggle<CR>
 nnoremap <F2> :NERDTreeFind<CR>
 
-" default updatetime 4000ms is not good for async update
-set updatetime=100
+" Signify
+set updatetime=100          "Default updatetime 4000ms is not good for async update
 let g:signify_realtime = 1
 
-" ========================== Syntastic ========================
+" Syntastic
 set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
-
 let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
-let g:syntastic_python_checkers=['flake8']
+
+
+" ----------- Plugin coc ----------
+" Always show the signcolumn, otherwise it would shift the text each time
+" diagnostics appear/become resolved.
+if has("nvim-0.5.0") || has("patch-8.1.1564")
+  " Recently vim can merge signcolumn and number column into one
+  set signcolumn=number
+else
+  set signcolumn=yes
+endif
+
+" Use tab for trigger completion with characters ahead and navigate.
+" NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
+" other plugin before putting this into your config.
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+" Use <c-space> to trigger completion.
+if has('nvim')
+  inoremap <silent><expr> <c-space> coc#refresh()
+else
+  inoremap <silent><expr> <c-@> coc#refresh()
+endif
 

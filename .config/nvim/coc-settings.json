@@ -1,0 +1,17 @@
+{
+  "languageserver": {
+      "golang": {
+        "command": "gopls",
+        "rootPatterns": ["go.mod"],
+        "filetypes": ["go"]
+      }
+  },
+
+  "yaml.schemas": {
+      "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.22.4-standalone-strict/all.json": [
+          "/*.yml",
+          "/*.yaml"
+      ]
+  }
+
+}

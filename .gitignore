@@ -1,3 +1,5 @@
 .vim/swap
 .vim/bundle
+.config/nvim/backup
+.config/nvim/swap
 
