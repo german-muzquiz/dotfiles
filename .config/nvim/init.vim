@@ -30,8 +30,11 @@ Plug 'tpope/vim-fugitive'                       "Git goodies
 Plug 'vim-airline/vim-airline'                  "Status line
 Plug 'vim-airline/vim-airline-themes'           "Status line themes
 Plug 'vim-syntastic/syntastic'                  "Syntax checking
-Plug 'neoclide/coc.nvim', {'branch': 'release'} "Language server client, used for autocompletion. :CocConfig
+Plug 'neoclide/coc.nvim', {'branch': 'release'} "Language server and client, used for autocompletion. :CocConfig
+                                                "Terraform language server: https://github.com/hashicorp/terraform-ls
 Plug 'andrewstuart/vim-kubernetes'              "Kube commands
+Plug 'hashivim/vim-terraform'                   "Terraform file types
+Plug 'ctrlpvim/ctrlp.vim'                       "Fuzzy file finder
 
 " Initialize plugin system
 call plug#end()
@@ -73,7 +76,7 @@ set nofoldenable
 set foldlevel=2
 set so=999
 set backupdir=~/.config/nvim/backup//
-set directory=~~/.config/nvim/swap//
+set directory=~/.config/nvim/swap//
 set autowriteall " Write all changes when leaving buffer
 set path+=**
 " Default tab handling
@@ -88,10 +91,12 @@ let mapleader="\<Space>"
 nnoremap <leader>, :noh<CR>
 " Select all
 nnoremap <Leader>a <esc>ggVG<CR>
-"" Format all
+" Format all
 nnoremap <Leader>l :syntax off<CR> gg=G :syntax on<CR>
-"" Go back to previous buffer
+" Go back to previous buffer
 nnoremap <Leader>6 :b#<CR>
+" Fuzzy find files
+nnoremap <Leader>f :CtrlP<CR>
 
 " Remember last position in file
 if has("autocmd")
@@ -114,12 +119,11 @@ set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
 let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
 
 
-" ----------- Plugin coc ----------
+" ---------------------------- Plugin coc ----------------------------
 " Always show the signcolumn, otherwise it would shift the text each time
 " diagnostics appear/become resolved.
 if has("nvim-0.5.0") || has("patch-8.1.1564")
@@ -129,24 +133,36 @@ else
   set signcolumn=yes
 endif
 
-" Use tab for trigger completion with characters ahead and navigate.
-" NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
-" other plugin before putting this into your config.
-inoremap <silent><expr> <TAB>
-      \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<TAB>" :
-      \ coc#refresh()
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
-
-function! s:check_back_space() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~# '\s'
-endfunction
-
 " Use <c-space> to trigger completion.
 if has('nvim')
   inoremap <silent><expr> <c-space> coc#refresh()
 else
   inoremap <silent><expr> <c-@> coc#refresh()
 endif
+
+" GoTo code navigation.
+nmap <silent> <C-b> <Plug>(coc-definition)
+nmap <silent> <F7> <Plug>(coc-references)
+
+" Use K to show documentation in preview window.
+nnoremap <silent> <c-j> :call ShowDocumentation()<CR>
+function! ShowDocumentation()
+  if CocAction('hasProvider', 'hover')
+    call CocActionAsync('doHover')
+  else
+    call feedkeys('K', 'in')
+  endif
+endfunction
+
+" Symbol renaming.
+nmap <F6> <Plug>(coc-rename)
+
+set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
+
+" Find symbol of current document.
+nnoremap <silent><nowait> <leader>o  :<C-u>CocList outline<cr>
+
+" Highlight the symbol and its references when holding the cursor.
+autocmd CursorHold * silent call CocActionAsync('highlight')
+
 
