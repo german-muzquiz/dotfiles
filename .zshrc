@@ -35,7 +35,7 @@ zstyle ':completion:*:kill:*' command 'ps -u $USER -o pid,%cpu,tty,cputime,cmd'
 compinit
 
 autoload -U colors && colors
-PROMPT="%{$fg[red]%}%n%{$reset_color%}@%{$fg[green]%}%m %{$fg[yellow]%}%(5~|%-1~/.../%2~|%4~) %{$reset_color%}%% "
+PROMPT="%{$fg[red]%}%n%{$reset_color%}@%{$fg[green]%}%m %{$fg[yellow]%}%(4~|%-1~/.../%2~|%3~) %{$reset_color%}%% "
 
 # incremental search in insert mode (Ctrl-R, Ctrl-F)
 bindkey "^F" history-incremental-search-forward
