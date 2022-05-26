@@ -37,11 +37,14 @@ compinit
 autoload -U colors && colors
 PROMPT="%{$fg[red]%}%n%{$reset_color%}@%{$fg[green]%}%m %{$fg[yellow]%}%(4~|%-1~/.../%2~|%3~) %{$reset_color%}%% "
 
-# incremental search in insert mode (Ctrl-R, Ctrl-F)
-bindkey "^F" history-incremental-search-forward
-bindkey "^R" history-incremental-search-backward
-
 set -o vi
+export EDITOR=vi    # Use vi as the default editor
+bindkey -e          # But still use emacs-style zsh bindings
+# incremental search in insert mode (Ctrl-R, Ctrl-F)
+bindkey "^f" history-incremental-search-forward
+bindkey "^r" history-incremental-search-backward
+bindkey -M vicmd "^f" history-incremental-search-forward 
+bindkey -M vicmd "^r" history-incremental-search-backward
 
 alias k=kubectl
 alias kctx=kubectx
