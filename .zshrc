@@ -39,12 +39,20 @@ PROMPT="%{$fg[red]%}%n%{$reset_color%}@%{$fg[green]%}%m %{$fg[yellow]%}%(4~|%-1~
 
 set -o vi
 export EDITOR=vi    # Use vi as the default editor
-bindkey -e          # But still use emacs-style zsh bindings
+bindkey -v          # But still use emacs-style zsh bindings
 # incremental search in insert mode (Ctrl-R, Ctrl-F)
-bindkey "^f" history-incremental-search-forward
-bindkey "^r" history-incremental-search-backward
-bindkey -M vicmd "^f" history-incremental-search-forward 
-bindkey -M vicmd "^r" history-incremental-search-backward
+bindkey "^R" history-incremental-search-backward
+bindkey "^F" history-incremental-search-forward
+#bindkey -M vicmd "^F" history-incremental-search-forward 
+#bindkey -M vicmd "^R" history-incremental-search-backward
+# incremental search in vi command mode
+bindkey -M vicmd '/' history-incremental-search-backward
+bindkey -M vicmd '?' history-incremental-search-forward
+# navigate matches in incremental search
+bindkey -M viins '^R' history-incremental-pattern-search-backward
+bindkey -M viins '^F' history-incremental-pattern-search-forward
+
+#set -o vi
 
 alias k=kubectl
 alias kctx=kubectx
