@@ -1,0 +1,38 @@
+[global_config]
+  title_transmit_fg_color = "#c0bfbc"
+  title_transmit_bg_color = "#272727"
+  title_inactive_fg_color = "#77767b"
+  title_inactive_bg_color = "#000000"
+  enabled_plugins = APTURLHandler,
+[keybindings]
+  zoom_in = ""
+  zoom_out = ""
+  zoom_normal = ""
+  cycle_next = ""
+  cycle_prev = ""
+  go_next = ""
+  go_prev = ""
+  go_up = ""
+  go_down = ""
+  go_left = ""
+  go_right = ""
+  full_screen = ""
+  group_all = ""
+  group_tab = ""
+  help = ""
+[profiles]
+  [[default]]
+    background_darkness = 0.92
+    background_type = transparent
+    cursor_color = "#aaaaaa"
+    scrollback_lines = 5000
+    disable_mousewheel_zoom = True
+[layouts]
+  [[default]]
+    [[[window0]]]
+      type = Window
+      parent = ""
+    [[[child1]]]
+      type = Terminal
+      parent = window0
+[plugins]
