@@ -1,6 +1,7 @@
 "--------------------------------------------- Initial setup ----------------------------------------
 ":PlugInstall           Install plugins
 "Install nodejs
+"Install ripgrep: https://github.com/BurntSushi/ripgrep#installation
 ":CocInstall coc-yaml   Install language server autocompletion for yaml
 ":CocInstall coc-json   Install language server autocompletion for json
 
@@ -23,18 +24,20 @@ call plug#begin()
 "   - e.g. `call plug#begin('~/.vim/plugged')`
 "   - Avoid using standard Vim directory names like 'plugin'
 
-Plug 'tanvirtin/monokai.nvim' 		            "Color scheme
-Plug 'preservim/nerdtree'                       "File explorer
-Plug 'mhinz/vim-signify'                        "Margin style for vcs modified files
-Plug 'tpope/vim-fugitive'                       "Git goodies
-Plug 'vim-airline/vim-airline'                  "Status line
-Plug 'vim-airline/vim-airline-themes'           "Status line themes
-Plug 'vim-syntastic/syntastic'                  "Syntax checking
-Plug 'neoclide/coc.nvim', {'branch': 'release'} "Language server and client, used for autocompletion. :CocConfig
-                                                "Terraform language server: https://github.com/hashicorp/terraform-ls
-Plug 'andrewstuart/vim-kubernetes'              "Kube commands
-Plug 'hashivim/vim-terraform'                   "Terraform file types
-Plug 'ctrlpvim/ctrlp.vim'                       "Fuzzy file finder
+Plug 'tanvirtin/monokai.nvim' 		                "Color scheme
+Plug 'preservim/nerdtree'                           "File explorer
+Plug 'mhinz/vim-signify'                            "Margin style for vcs modified files
+Plug 'tpope/vim-fugitive'                           "Git goodies
+Plug 'vim-airline/vim-airline'                      "Status line
+Plug 'vim-airline/vim-airline-themes'               "Status line themes
+Plug 'vim-syntastic/syntastic'                      "Syntax checking
+Plug 'neoclide/coc.nvim', {'branch': 'release'}     "Language server and client, used for autocompletion. :CocConfig
+                                                    "Terraform language server: https://github.com/hashicorp/terraform-ls
+Plug 'andrewstuart/vim-kubernetes'                  "Kube commands
+Plug 'hashivim/vim-terraform'                       "Terraform file types
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } } "Fuzzy file finder
+Plug 'junegunn/fzf.vim'
+
 
 " Initialize plugin system
 call plug#end()
@@ -96,12 +99,33 @@ nnoremap <Leader>l :syntax off<CR> gg=G :syntax on<CR>
 " Go back to previous buffer
 nnoremap <Leader>6 :b#<CR>
 " Fuzzy find files
-nnoremap <Leader>f :CtrlP<CR>
+nnoremap <Leader>f :Files<CR>
+" Fuzzy find buffers
+nnoremap <Leader>b :Buffers<CR>
+" Find in files
+"nnoremap <Leader>f :vimgrep //j **<left><left><left><left><left>
+nnoremap <Leader>s :Rg! 
+" Load commit history of current file
+nnoremap <Leader>h :Gclog! -- %<CR>
+" Show git status
+nnoremap <Leader>g :Git<CR>
+" Commit
+nnoremap <Leader>k :Git commit<CR>
+" Push
+nnoremap <Leader>p :Git push<CR>
 
 " Remember last position in file
 if has("autocmd")
     au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
 endif
+
+" Automatically open quick fix window or location window after vimgrep and
+" friends
+augroup myvimrc
+    autocmd!
+    autocmd QuickFixCmdPost [^l]* cwindow
+    autocmd QuickFixCmdPost l*    lwindow
+augroup END
 
 
 "------------------------------------------------ Plugin config -----------------------------------------------
@@ -122,6 +146,27 @@ let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
 
+
+" -------------------------------- FZF -------------------------------
+" - Popup window (anchored to the bottom of the current window)
+"let g:fzf_layout = { 'window': { 'width': 1.0, 'height': 0.6, 'relative': v:true, 'yoffset': 1.0 } }
+
+" Customize fzf colors to match your color scheme
+" - fzf#wrap translates this to a set of `--color` options
+let g:fzf_colors =
+\ { 'fg':      ['fg', 'Normal'],
+  \ 'bg':      ['bg', 'Normal'],
+  \ 'hl':      ['fg', 'Comment'],
+  \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
+  \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
+  \ 'hl+':     ['fg', 'Statement'],
+  \ 'info':    ['fg', 'PreProc'],
+  \ 'border':  ['fg', 'Ignore'],
+  \ 'prompt':  ['fg', 'Conditional'],
+  \ 'pointer': ['fg', 'Exception'],
+  \ 'marker':  ['fg', 'Keyword'],
+  \ 'spinner': ['fg', 'Label'],
+  \ 'header':  ['fg', 'Comment'] }
 
 " ---------------------------- Plugin coc ----------------------------
 " Always show the signcolumn, otherwise it would shift the text each time
@@ -158,9 +203,6 @@ endfunction
 nmap <F6> <Plug>(coc-rename)
 
 "set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
-
-" Find symbol of current document.
-nnoremap <silent><nowait> <leader>o  :<C-u>CocList outline<cr>
 
 " Highlight the symbol and its references when holding the cursor.
 autocmd CursorHold * silent call CocActionAsync('highlight')
