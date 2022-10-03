@@ -1,9 +1,11 @@
+"----------------------------------------------------------------------------------------------------
 "--------------------------------------------- Initial setup ----------------------------------------
-":PlugInstall           Install plugins
-"Install nodejs
-"Install ripgrep: https://github.com/BurntSushi/ripgrep#installation
-":CocInstall coc-yaml   Install language server autocompletion for yaml
-":CocInstall coc-json   Install language server autocompletion for json
+"----------------------------------------------------------------------------------------------------
+"Install plugins                        :PlugInstall
+"Install ripgrep for find in files      https://github.com/BurntSushi/ripgrep#installation
+"Install python language server         pip install "python-lsp-server[all]"
+"Install terraform language server      https://github.com/hashicorp/terraform-ls
+"Install yaml language server           yarn global add yaml-language-server
 
 
 
@@ -30,28 +32,32 @@ Plug 'mhinz/vim-signify'                            "Margin style for vcs modifi
 Plug 'tpope/vim-fugitive'                           "Git goodies
 Plug 'vim-airline/vim-airline'                      "Status line
 Plug 'vim-airline/vim-airline-themes'               "Status line themes
-Plug 'vim-syntastic/syntastic'                      "Syntax checking
-Plug 'neoclide/coc.nvim', {'branch': 'release'}     "Language server and client, used for autocompletion. :CocConfig
-                                                    "Terraform language server: https://github.com/hashicorp/terraform-ls
 Plug 'andrewstuart/vim-kubernetes'                  "Kube commands
 Plug 'hashivim/vim-terraform'                       "Terraform file types
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } } "Fuzzy file finder
 Plug 'junegunn/fzf.vim'
+Plug 'vim-scripts/AutoComplPop'                     "Automatically show vim's complete menu while typing
+Plug 'neovim/nvim-lspconfig'                        "Native neovim language server protocol
 
 
 " Initialize plugin system
 call plug#end()
 
-
+" Load config from ~/.config/nvim/lua/config.lua
+lua require('config')
 
 "------------------------------------------------ Colors -------------------------------------------
 set background=dark
-colorscheme monokai
+colorscheme monokai_ristretto
 let g:airline_theme='deus'
 
 
 "------------------------------------------------ Common -------------------------------------------
-syntax on
+" Switch syntax highlighting on, when the terminal has colors
+" Also switch on highlighting the last used search pattern.
+if (&t_Co > 2 || has("gui_running")) && !exists("syntax_on")
+    syntax on
+endif
 set encoding=utf-8
 set nobreakindent   	"Don't break lines automatically
 set tw=0                "Don't break lines automatically
@@ -59,37 +65,48 @@ set nowrap
 set sidescroll=1
 set sidescrolloff=50
 set showmode
-set showcmd
+set showcmd             "Display incomplete commands
 set hidden
 " Show autocomplete options
 set wildmenu
 set wildignore+=*/.git/*,*/.hg/*,*/.svn/*,*/.idea/*,*/.DS_Store,*/node_modules/*,*/target/*,*/*.jar,*/*.class,*/*.zip,*/*.tar,*/*.gz,*/*.war,*/bower_components/*,*/dist/*,*/.terraform/*
 set completeopt=longest,preview,menuone
 set cursorline
-set ruler
+set ruler               "Show the cursor position all the time
 set number
 " Search settings
 set hlsearch
-set incsearch
+set incsearch           "Do incremental searching
 set smartcase
+set laststatus=2        "Always display the status line
 set ignorecase
 set foldmethod=indent
 set foldnestmax=10
 set nofoldenable
 set foldlevel=2
 set so=999
-set backupdir=~/.config/nvim/backup//
+set nobackup            "Coc vim: Some language servers have issues with backup files
+set nowritebackup       "Coc vim: Some language servers have issues with backup files
 set directory=~/.config/nvim/swap//
-set autowriteall " Write all changes when leaving buffer
+set autowriteall        "Write all changes when leaving buffer
 set path+=**
+set updatetime=100      "Default updatetime 4000ms is not good for async update. This setting is lowered for signify and coc
 " Default tab handling
 set tabstop=4
 set softtabstop=4
 set shiftwidth=4
 set expandtab
+" Open new split panes to right and bottom, which feels more natural
+set splitbelow
+set splitright
+set diffopt+=vertical   "Always use vertical diffs
 
 "------------------------------------------------ Custom keybindings -------------------------------------------
 let mapleader="\<Space>"
+" Cycle through splits
+nnoremap <TAB> <C-w>w
+" Keep cursor at the bottom of the visual selection after you yank it.
+vmap y ygv<Esc>
 " Hide search highlights
 nnoremap <leader>, :noh<CR>
 " Select all
@@ -99,20 +116,35 @@ nnoremap <Leader>l :syntax off<CR> gg=G :syntax on<CR>
 " Go back to previous buffer
 nnoremap <Leader>6 :b#<CR>
 " Fuzzy find files
-nnoremap <Leader>f :Files<CR>
+nnoremap ff :Files<CR>
 " Fuzzy find buffers
-nnoremap <Leader>b :Buffers<CR>
+nnoremap fb :Buffers<CR>
 " Find in files
 "nnoremap <Leader>f :vimgrep //j **<left><left><left><left><left>
-nnoremap <Leader>s :Rg! 
+nnoremap fs :Rg! 
+nnoremap l[ :lprevious<CR>
+nnoremap l] :lnext<CR>
 " Load commit history of current file
-nnoremap <Leader>h :Gclog! -- %<CR>
+"nnoremap <Leader>h :Gclog! -- %<CR>
+nnoremap <Leader>h :BCommits!<CR>
 " Show git status
 nnoremap <Leader>g :Git<CR>
 " Commit
 nnoremap <Leader>k :Git commit<CR>
 " Push
 nnoremap <Leader>p :Git push<CR>
+" Navigate the complete menu items like CTRL+n / CTRL+p would
+inoremap <expr> <Down> pumvisible() ? "<C-n>" :"<Down>"
+inoremap <expr> <TAB> pumvisible() ? "<C-n>" :"<TAB>"
+inoremap <expr> <Up> pumvisible() ? "<C-p>" :"<Up>"
+inoremap <expr> <S-TAB> pumvisible() ? "<C-p>" :"<S-TAB>"
+" Select the complete menu item like CTRL+y would
+inoremap <expr> <Right> pumvisible() ? "<C-y>" :"<Right>"
+inoremap <expr> <CR> pumvisible() ? "<C-y>" :"<CR>"
+" Cancel the complete manu item like CTRL+e would
+inoremap <expr> <Left> pumvisible() ? "<C-e>" :"<Left>"
+
+
 
 " Remember last position in file
 if has("autocmd")
@@ -128,83 +160,84 @@ augroup myvimrc
 augroup END
 
 
-"------------------------------------------------ Plugin config -----------------------------------------------
-" NERDTree
-let NERDTreeWinSize=45
-nnoremap <F1> :NERDTreeToggle<CR>
-nnoremap <F2> :NERDTreeFind<CR>
+"----------------------------------------------------------------------------------------------------
+"--------------------------------------------- Plugin config ----------------------------------------
+"----------------------------------------------------------------------------------------------------
 
-" Signify
-set updatetime=100          "Default updatetime 4000ms is not good for async update
+" -------------------------------- NERDTree -------------------------------
+" Disable netrw.
+let g:loaded_netrw  = 1
+let g:loaded_netrwPlugin = 1
+let g:loaded_netrwSettings = 1
+let g:loaded_netrwFileHandlers = 1
+
+let NERDTreeWinSize=45
+nnoremap <Leader>1 :NERDTreeToggle<CR>
+nnoremap <Leader>2 :NERDTreeFind<CR>
+
+" -------------------------------- Signify --------------------------------
 let g:signify_realtime = 1
 
-" Syntastic
-"set statusline+=%#warningmsg#
-"set statusline+=%{SyntasticStatuslineFlag()}
-"set statusline+=%*
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_check_on_open = 1
-let g:syntastic_check_on_wq = 0
 
-
-" -------------------------------- FZF -------------------------------
-" - Popup window (anchored to the bottom of the current window)
-"let g:fzf_layout = { 'window': { 'width': 1.0, 'height': 0.6, 'relative': v:true, 'yoffset': 1.0 } }
-
+" ---------------------------------- FZF ----------------------------------
 " Customize fzf colors to match your color scheme
 " - fzf#wrap translates this to a set of `--color` options
 let g:fzf_colors =
-\ { 'fg':      ['fg', 'Normal'],
-  \ 'bg':      ['bg', 'Normal'],
-  \ 'hl':      ['fg', 'Comment'],
-  \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
-  \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
-  \ 'hl+':     ['fg', 'Statement'],
-  \ 'info':    ['fg', 'PreProc'],
-  \ 'border':  ['fg', 'Ignore'],
-  \ 'prompt':  ['fg', 'Conditional'],
-  \ 'pointer': ['fg', 'Exception'],
-  \ 'marker':  ['fg', 'Keyword'],
-  \ 'spinner': ['fg', 'Label'],
-  \ 'header':  ['fg', 'Comment'] }
+            \ { 'fg':      ['fg', 'Normal'],
+            \ 'bg':      ['bg', 'Normal'],
+            \ 'hl':      ['fg', 'Comment'],
+            \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
+            \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
+            \ 'hl+':     ['fg', 'Statement'],
+            \ 'info':    ['fg', 'PreProc'],
+            \ 'border':  ['fg', 'Ignore'],
+            \ 'prompt':  ['fg', 'Conditional'],
+            \ 'pointer': ['fg', 'Exception'],
+            \ 'marker':  ['fg', 'Keyword'],
+            \ 'spinner': ['fg', 'Label'],
+            \ 'header':  ['fg', 'Comment'] }
 
-" ---------------------------- Plugin coc ----------------------------
-" Always show the signcolumn, otherwise it would shift the text each time
-" diagnostics appear/become resolved.
-if has("nvim-0.5.0") || has("patch-8.1.1564")
-  " Recently vim can merge signcolumn and number column into one
-  set signcolumn=number
-else
-  set signcolumn=yes
-endif
 
-" Use <c-space> to trigger completion.
-if has('nvim')
-  inoremap <silent><expr> <c-space> coc#refresh()
-else
-  inoremap <silent><expr> <c-@> coc#refresh()
-endif
+" ------------------------------ My custom help -----------------------------
 
-" GoTo code navigation.
-nmap <silent> <C-b> <Plug>(coc-definition)
-nmap <silent> <F7> <Plug>(coc-references)
-
-" Use K to show documentation in preview window.
-nnoremap <silent> <c-j> :call ShowDocumentation()<CR>
-function! ShowDocumentation()
-  if CocAction('hasProvider', 'hover')
-    call CocActionAsync('doHover')
-  else
-    call feedkeys('K', 'in')
-  endif
+function! MyCustomHelp() 
+    :setlocal modifiable
+    :e myhelp
+    call appendbufline("myhelp", "^", "-------------------------------------------------")
+    call appendbufline("myhelp", "^", "Main keybindings")
+    call appendbufline("myhelp", "^", "-------------------------------------------------")
+    call appendbufline("myhelp", "$", "")
+    call appendbufline("myhelp", "$", "-> Normal mode, custom")
+    call appendbufline("myhelp", "$", "")
+    call appendbufline("myhelp", "$", "<TAB>                Cycle through splits")
+    call appendbufline("myhelp", "$", "<Space>,             Hide highlights")
+    call appendbufline("myhelp", "$", "<Space>a             Select all")
+    call appendbufline("myhelp", "$", "<Space>6             Go back to previous buffer")
+    call appendbufline("myhelp", "$", "ff                   Fuzzy find files")
+    call appendbufline("myhelp", "$", "fb                   Fuzzy find buffers")
+    call appendbufline("myhelp", "$", "fs                   Find string in files (like grep)")
+    call appendbufline("myhelp", "$", "<Space>h             Git commit history")
+    call appendbufline("myhelp", "$", "<Space>g             Git status")
+    call appendbufline("myhelp", "$", "<Space>k             Git commit")
+    call appendbufline("myhelp", "$", "<Space>p             Git push")
+    call appendbufline("myhelp", "$", "gd                   Go to definition")
+    call appendbufline("myhelp", "$", "gD                   Go to declaration")
+    call appendbufline("myhelp", "$", "gi                   Go to implementation")
+    call appendbufline("myhelp", "$", "gr                   Go to references")
+    call appendbufline("myhelp", "$", "gk                   Doc for symbol under cursor (LSP source)")
+    call appendbufline("myhelp", "$", "")
+    call appendbufline("myhelp", "$", "-> Normal mode, vim standard")
+    call appendbufline("myhelp", "$", "K                    Show documentation (keywordprg source)")
+    call appendbufline("myhelp", "$", "")
+    call appendbufline("myhelp", "$", "-> Insert mode, vim standard")
+    call appendbufline("myhelp", "$", "<CTRL+x><CTRL+o>     Autocomplete from LSP, tags file, etc.")
+    :setlocal nomodifiable
+    :setlocal buftype=nofile
+    :setlocal bufhidden=wipe
+    :setlocal filetype=myhelp
 endfunction
 
-" Symbol renaming.
-nmap <F6> <Plug>(coc-rename)
-
-"set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
-
-" Highlight the symbol and its references when holding the cursor.
-autocmd CursorHold * silent call CocActionAsync('highlight')
+command! -nargs=0 MyHelp call MyCustomHelp()
+nnoremap ? :MyHelp<CR>
 
 
