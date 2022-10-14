@@ -37,3 +37,8 @@ alias ll='ls -lGFh'
 alias ls='ls -G --color=auto'
 alias vim='nvim'
 
+alias kill-zscaler="find /Library/LaunchAgents -name '*zscaler*' -exec launchctl unload {} \;;sudo find /Library/LaunchDaemons -name '*zscaler*' -exec launchctl unload {} \;"
+
+export AWS_PROFILE=innovation-team
+
+
