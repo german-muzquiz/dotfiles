@@ -1,6 +1,7 @@
 "----------------------------------------------------------------------------------------------------
 "--------------------------------------------- Initial setup ----------------------------------------
 "----------------------------------------------------------------------------------------------------
+"Install plug.vim                       sh -c 'curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
 "Install plugins                        :PlugInstall
 "Install ripgrep for find in files      https://github.com/BurntSushi/ripgrep#installation
 "Install python language server         pip install "python-lsp-server[all]"
@@ -225,8 +226,6 @@ function! MyCustomHelp()
     call appendbufline("myhelp", "$", "gi                   Go to implementation")
     call appendbufline("myhelp", "$", "gr                   Go to references")
     call appendbufline("myhelp", "$", "gk                   Doc for symbol under cursor (LSP source)")
-    call appendbufline("myhelp", "$", "l[                   Jump to previous item in location list")
-    call appendbufline("myhelp", "$", "l]                   Jump to next item in location list")
     call appendbufline("myhelp", "$", "")
     call appendbufline("myhelp", "$", "-> Normal mode, vim standard")
     call appendbufline("myhelp", "$", "K                    Show documentation (keywordprg source)")
