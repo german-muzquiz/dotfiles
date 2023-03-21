@@ -123,8 +123,6 @@ nnoremap fb :Buffers<CR>
 " Find in files
 "nnoremap <Leader>f :vimgrep //j **<left><left><left><left><left>
 nnoremap fs :Rg! 
-nnoremap l[ :lprevious<CR>
-nnoremap l] :lnext<CR>
 " Load commit history of current file
 "nnoremap <Leader>h :Gclog! -- %<CR>
 nnoremap <Leader>h :BCommits!<CR>
