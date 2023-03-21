@@ -39,6 +39,9 @@ Plug 'junegunn/fzf', { 'do': { -> fzf#install() } } "Fuzzy file finder
 Plug 'junegunn/fzf.vim'
 Plug 'vim-scripts/AutoComplPop'                     "Automatically show vim's complete menu while typing
 Plug 'neovim/nvim-lspconfig'                        "Native neovim language server protocol
+Plug 'williamboman/mason.vim'                       "Automatically install and manage language servers (:Mason)
+Plug 'godlygeek/tabular'                            "Automatically :Tabularize content
+Plug 'preservim/vim-markdown', {'for': 'markdown'}  "Mardown plugin
 
 
 " Initialize plugin system
@@ -224,12 +227,18 @@ function! MyCustomHelp()
     call appendbufline("myhelp", "$", "gi                   Go to implementation")
     call appendbufline("myhelp", "$", "gr                   Go to references")
     call appendbufline("myhelp", "$", "gk                   Doc for symbol under cursor (LSP source)")
+    call appendbufline("myhelp", "$", "pa                   Add path to workspace for LSP")
+    call appendbufline("myhelp", "$", "pr                   Remove path from workspace for LSP")
+    call appendbufline("myhelp", "$", "pl                   List folders under LSP")
     call appendbufline("myhelp", "$", "")
     call appendbufline("myhelp", "$", "-> Normal mode, vim standard")
     call appendbufline("myhelp", "$", "K                    Show documentation (keywordprg source)")
     call appendbufline("myhelp", "$", "")
     call appendbufline("myhelp", "$", "-> Insert mode, vim standard")
     call appendbufline("myhelp", "$", "<CTRL+x><CTRL+o>     Autocomplete from LSP, tags file, etc.")
+    call appendbufline("myhelp", "$", "-> Useful functions")
+    call appendbufline("myhelp", "$", ":LspInfo             Print status of language server")
+    call appendbufline("myhelp", "$", ":Mason               Install language servers")
     :setlocal nomodifiable
     :setlocal buftype=nofile
     :setlocal bufhidden=wipe
