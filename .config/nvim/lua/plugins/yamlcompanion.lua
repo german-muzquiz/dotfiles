@@ -44,10 +44,10 @@ return {
                 name = "Docker Compose",
                 uri = "https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json",
             },
-            {
-                name = "AWS CloudFormation",
-                uri = "https://s3.amazonaws.com/cfn-resource-specifications-us-east-1-prod/schemas/2.15.0/all-spec.json",
-            },
+            -- {
+            --     name = "AWS CloudFormation",
+            --     uri = "https://s3.amazonaws.com/cfn-resource-specifications-us-east-1-prod/schemas/2.15.0/all-spec.json",
+            -- },
         },
         -- Pass any additional options that will be merged in the final LSP config
         lspconfig = {

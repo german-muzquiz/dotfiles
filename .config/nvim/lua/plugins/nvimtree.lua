@@ -18,6 +18,8 @@ return {
         update_cwd = true,
       },
       renderer = {
+        add_trailing = true,
+        group_empty = true,
         root_folder_modifier = ':t',
         icons = {
           show = {
@@ -41,13 +43,13 @@ return {
               symlink_open = '',
             },
             git = {
-              unstaged = 'U',
-              staged = 'U',
+              unstaged = '[M]',
+              staged = '[M]',
               unmerged = ' ',
-              renamed = 'U',
-              untracked = 'A',
-              deleted = 'D',
-              ignored = 'I',
+              renamed = '[R]',
+              untracked = '[?]',
+              deleted = '[D]',
+              ignored = '[I]',
             },
           },
         },
