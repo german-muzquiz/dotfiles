@@ -73,5 +73,15 @@ return {
 				},
 			},
 		})
+
+        -- Setting up groovy server
+        lspconfig.groovyls.setup({
+			on_attach = on_attach,
+			capabilities = capabilities,
+            filetypes = { "Jenkinsfile", "groovy" },
+            cmd = { "java", "-jar", vim.fn.stdpath("data") .. "/mason/packages/groovy-language-server/build/libs/groovy-language-server-all.jar" },
+        })
+
+        vim.lsp.set_log_level("DEBUG")
 	end,
 }
