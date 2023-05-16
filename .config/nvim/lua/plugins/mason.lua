@@ -48,6 +48,7 @@ return {
 				"terraformls",
 				"gopls",
 				"yamlls",
+				"groovyls",
 			},
 			automatic_installation = true,
 		})

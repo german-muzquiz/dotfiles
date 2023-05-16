@@ -49,7 +49,7 @@ return {
 		end
 
 		-- Setting up servers
-		local servers = { "terraformls", "pyright", "bashls", "gopls", "jsonls", "yamlls" }
+		local servers = { "terraformls", "pyright", "bashls", "gopls", "jsonls", "yamlls", "groovyls" }
 		for _, server in ipairs(servers) do
 			if lspconfig[server] then
 				lspconfig[server].setup({ on_attach = on_attach, capabilities = capabilities })
