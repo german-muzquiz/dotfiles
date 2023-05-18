@@ -18,6 +18,12 @@ return {
         path_display = { "smart" },
         file_ignore_patterns = { ".git/", "node_modules", ".idea" },
       },
+      pickers = {
+          buffers = {
+              ignore_current_buffer = true,
+              sort_mru = true,
+          },
+      },
     }
 
     -- Setting Telescope Keymaps
