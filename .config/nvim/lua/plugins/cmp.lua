@@ -36,8 +36,8 @@ return{
         end,
       },
       window = {
-        completion = cmp.config.window.bordered(),
-        documentation = cmp.config.window.bordered(),
+        -- completion = cmp.config.window.bordered(),
+        -- documentation = cmp.config.window.bordered(),
       },
       formatting = {
         fields = { "abbr", "menu", "kind" },
@@ -56,6 +56,8 @@ return{
       mapping = cmp.mapping.preset.insert({
         ['<C-b>'] = cmp.mapping.scroll_docs(-4),
         ['<C-f>'] = cmp.mapping.scroll_docs(4),
+        ['<TAB>'] = cmp.mapping.select_next_item(),
+        ['<S-TAB>'] = cmp.mapping.select_prev_item(),
         ['<C-Space>'] = cmp.mapping.complete(),
         ['<C-e>'] = cmp.mapping {
           i = cmp.mapping.abort(),
