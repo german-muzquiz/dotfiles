@@ -43,6 +43,8 @@ return {
     function _LAZYGIT_TOGGLE()
       lazygit:toggle()
     end
+
+    vim.keymap.set("v", "<leader>t", "<cmd>ToggleTermSendVisualSelection<CR>")
   end,
 }
 
