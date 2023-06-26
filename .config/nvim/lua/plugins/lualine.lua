@@ -1,70 +1,81 @@
-
 return {
-  'nvim-lualine/lualine.nvim',
-  --dependencies = { 'nvim-tree/nvim-web-devicons' },
-  config = function ()
-    -- Using protected call
-    local status_ok, lualine = pcall(require, 'lualine')
-    if not status_ok then
-      return
-    end
-    local hide_in_width = function()
-      return vim.fn.winwidth(0) > 80
-    end
+  "nvim-lualine/lualine.nvim",
+  event = "VeryLazy",
+  opts = function()
+    local icons = require("lazyvim.config").icons
+    local Util = require("lazyvim.util")
 
-    local diagnostics = {
-      'diagnostics',
-      sources = { 'nvim_diagnostic' },
-      sections = { 'error', 'warn' },
-      symbols = { error = 'E ', warn = 'W ' },
-      colored = true,
-      always_visible = false,
-    }
-
-    local diff = {
-      'diff',
-      colored = true,
-      symbols = { added = '+', modified = '~', removed = '-' }, -- changes diff symbols
-      cond = hide_in_width,
-    }
-
-    local filetype = {
-      'filetype',
-      icons_enabled = false,
-    }
-
-    local location = {
-      'location',
-      padding = 0,
-    }
-
-    local function yaml_schema()
-        local schema = require("yaml-companion").get_buf_schema(0)
-        if schema.result[1].name == "none" then
-            return ""
-        end
-        return schema.result[1].name
-    end
-
-    lualine.setup {
+    return {
       options = {
+        theme = "auto",
         globalstatus = true,
-        icons_enabled = false,
-        theme = 'auto',
-        component_separators = { left = '|', right = '|' },
-        section_separators = { left = '', right = '' },
-        disabled_filetypes = { 'alpha', 'dashboard' },
-        always_divide_middle = true,
+        disabled_filetypes = { statusline = { "dashboard", "alpha" } },
       },
       sections = {
-        lualine_a = { 'mode' },
-        lualine_b = { 'branch', diff, diagnostics },
-        lualine_c = { 'filename' },
-        lualine_x = { yaml_schema, 'encoding', 'fileformat', filetype },
-        lualine_y = { 'progress' },
-        lualine_z = { location },
+        lualine_a = { "mode" },
+        lualine_b = { "branch" },
+        lualine_c = {
+          {
+            "diagnostics",
+            symbols = {
+              error = icons.diagnostics.Error,
+              warn = icons.diagnostics.Warn,
+              info = icons.diagnostics.Info,
+              hint = icons.diagnostics.Hint,
+            },
+          },
+          { "filetype", icon_only = true, separator = "", padding = { left = 1, right = 0 } },
+          { "filename", path = 1, symbols = { modified = "  ", readonly = "", unnamed = "" } },
+            -- stylua: ignore
+            {
+              function() return require("nvim-navic").get_location() end,
+              cond = function() return package.loaded["nvim-navic"] and require("nvim-navic").is_available() end,
+            },
+        },
+        lualine_x = {
+            -- stylua: ignore
+            {
+              function()
+                local schema = require("yaml-companion").get_buf_schema(0)
+                if schema.result[1].name == "none" then
+                    return ""
+                end
+                return schema.result[1].name
+              end,
+              color = Util.fg("Statement"),
+            },
+            -- stylua: ignore
+            {
+              function() return require("noice").api.status.command.get() end,
+              cond = function() return package.loaded["noice"] and require("noice").api.status.command.has() end,
+              color = Util.fg("Statement"),
+            },
+            -- stylua: ignore
+          { "filetype" },
+            -- stylua: ignore
+            {
+              function() return "  " .. require("dap").status() end,
+              cond = function () return package.loaded["dap"] and require("dap").status() ~= "" end,
+              color = Util.fg("Debug"),
+            },
+          { require("lazy.status").updates, cond = require("lazy.status").has_updates, color = Util.fg("Special") },
+          {
+            "diff",
+            symbols = {
+              added = icons.git.added,
+              modified = icons.git.modified,
+              removed = icons.git.removed,
+            },
+          },
+        },
+        lualine_y = {
+          { "progress", separator = " ", padding = { left = 1, right = 1 } },
+        },
+        lualine_z = {
+          { "location" },
+        },
       },
+      extensions = { "neo-tree", "lazy" },
     }
-  end
+  end,
 }
-

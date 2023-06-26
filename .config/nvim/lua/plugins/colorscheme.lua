@@ -1,10 +1,18 @@
 
+-- return {
+--   'sainnhe/sonokai',
+--   priority = 1000,
+--   config = function()
+--     vim.g.sonokai_style = "atlantis"
+--     --vim.g.sonokai_current_word = "underline"
+--     vim.cmd.colorscheme 'sonokai'
+--   end,
+-- }
+
 return {
-  'sainnhe/sonokai',
+  'folke/tokyonight.nvim',
   priority = 1000,
   config = function()
-    vim.g.sonokai_style = "atlantis"
-    vim.g.sonokai_current_word = "underline"
-    vim.cmd.colorscheme 'sonokai'
+    vim.cmd.colorscheme 'tokyonight-storm'
   end,
 }
