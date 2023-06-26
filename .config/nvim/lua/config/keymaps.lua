@@ -122,6 +122,7 @@ end
 -- lazygit
 vim.keymap.del("n", "<leader>gg")
 vim.keymap.del("n", "<leader>gG")
+map("n", "<leader>gs", "<cmd>Neotree bottom git_status<cr>", { desc = "status" })
 
 -- quit
 map("n", "<leader>qq", "<cmd>qa<cr>", { desc = "Quit all" })
