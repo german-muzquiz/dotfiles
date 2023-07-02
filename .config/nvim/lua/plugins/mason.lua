@@ -52,21 +52,18 @@ return {
       automatic_installation = true,
     })
 
-    mason_lspconfig.setup_handlers({
-      -- YAML
-      ["yamlls"] = function()
-        -- TODO: Figure out how to call my lsp_attach from inside plugin on_attach
-        local status_ok, lspconfig = pcall(require, "lspconfig")
-        if not status_ok then
-          return
-        end
-        require("config.ls_config")
-        local yamlconfig = require("yaml-companion").setup({
-          lspconfig = Language_server_config["yamlls"],
-        })
-        lspconfig["yamlls"].setup(yamlconfig)
-      end,
-    })
+    -- mason_lspconfig.setup_handlers({
+    --   -- YAML
+    --   ["yamlls"] = function()
+    --     -- TODO: Figure out how to call my lsp_attach from inside plugin on_attach
+    --     local status_ok, lspconfig = pcall(require, "lspconfig")
+    --     if not status_ok then
+    --       return
+    --     end
+    --     local cfg = require("yaml-companion").setup({})
+    --     lspconfig["yamlls"].setup(cfg)
+    --   end,
+    -- })
 
     -- Setting up keymaps
     vim.keymap.set("n", "<leader>lI", vim.cmd.Mason, { silent = true })

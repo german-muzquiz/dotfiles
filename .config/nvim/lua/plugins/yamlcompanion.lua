@@ -1,9 +1,13 @@
+-- return {}
 return {
   "someone-stole-my-name/yaml-companion.nvim",
   dependencies = {
     "neovim/nvim-lspconfig",
     "nvim-lua/plenary.nvim",
     "nvim-telescope/telescope.nvim",
+  },
+  keys = {
+    { "<leader>sx", "<cmd>Telescope yaml_schema<CR>", desc = "Select schema" },
   },
   config = function()
     -- Using protected call
@@ -13,9 +17,8 @@ return {
     end
 
     require("telescope").load_extension("yaml_schema")
-    require("config.ls_config")
 
-    companion.setup({
+    local cfg = companion.setup({
       -- Built in file matchers
       builtin_matchers = {
         -- Detects Kubernetes files based on content
@@ -44,13 +47,45 @@ return {
           name = "Docker Compose",
           uri = "https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json",
         },
-        -- {
-        --     name = "AWS CloudFormation",
-        --     uri = "https://s3.amazonaws.com/cfn-resource-specifications-us-east-1-prod/schemas/2.15.0/all-spec.json",
-        -- },
       },
       -- Pass any additional options that will be merged in the final LSP config
-      lspconfig = Language_server_config["yamlls"],
+      lspconfig = {
+        flags = {
+          debounce_text_changes = 150,
+        },
+        settings = {
+          redhat = { telemetry = { enabled = false } },
+          yaml = {
+            validate = true,
+            format = { enable = true },
+            hover = true,
+            schemaStore = {
+              enable = true,
+              url = "https://www.schemastore.org/api/json/catalog.json",
+            },
+            schemaDownload = { enable = true },
+            schemas = {
+              -- ["https://raw.githubusercontent.com/awslabs/goformation/master/schema/cloudformation.schema.json"] = {
+              --   "**/cloudformation/*.yaml",
+              --   "**/cloudformation/*.yml",
+              --   "**/*.cf.json",
+              --   "**/*.cf.yml",
+              --   "**/*.cf.yaml",
+              --   "**/cloudformation.json",
+              --   "**/cloudformation.yml",
+              --   "**/cloudformation.yaml",
+              -- },
+              -- ["https://json.schemastore.org/kustomization.json"] = {
+              --   "**/kustomization.yaml",
+              --   "**/kustomization.yml",
+              -- },
+            },
+            trace = { server = "debug" },
+          },
+        },
+      },
     })
+
+    require("lspconfig")["yamlls"].setup(cfg)
   end,
 }

@@ -36,11 +36,15 @@ return {
             -- stylua: ignore
             {
               function()
-                local schema = require("yaml-companion").get_buf_schema(0)
-                if schema.result[1].name == "none" then
+                local schema = require("config.yaml_schemas").current_schema(0)
+                if schema.uri == "none" then
                     return ""
                 end
-                return schema.result[1].name
+                if schema.name then
+                  return schema.name
+                else
+                  return ".." .. schema.uri:sub(-50)
+                end
               end,
               color = Util.fg("Statement"),
             },
