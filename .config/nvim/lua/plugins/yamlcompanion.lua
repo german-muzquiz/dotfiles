@@ -1,10 +1,10 @@
--- return {}
 return {
   "someone-stole-my-name/yaml-companion.nvim",
   dependencies = {
     "neovim/nvim-lspconfig",
     "nvim-lua/plenary.nvim",
     "nvim-telescope/telescope.nvim",
+    "b0o/SchemaStore.nvim",
   },
   keys = {
     { "<leader>sx", "<cmd>Telescope yaml_schema<CR>", desc = "Select schema" },
@@ -64,22 +64,23 @@ return {
               url = "https://www.schemastore.org/api/json/catalog.json",
             },
             schemaDownload = { enable = true },
-            schemas = {
-              -- ["https://raw.githubusercontent.com/awslabs/goformation/master/schema/cloudformation.schema.json"] = {
-              --   "**/cloudformation/*.yaml",
-              --   "**/cloudformation/*.yml",
-              --   "**/*.cf.json",
-              --   "**/*.cf.yml",
-              --   "**/*.cf.yaml",
-              --   "**/cloudformation.json",
-              --   "**/cloudformation.yml",
-              --   "**/cloudformation.yaml",
-              -- },
-              -- ["https://json.schemastore.org/kustomization.json"] = {
-              --   "**/kustomization.yaml",
-              --   "**/kustomization.yml",
-              -- },
-            },
+            schemas = require("schemastore").yaml.schemas(),
+            -- schemas = {
+            --   -- ["https://raw.githubusercontent.com/awslabs/goformation/master/schema/cloudformation.schema.json"] = {
+            --   --   "**/cloudformation/*.yaml",
+            --   --   "**/cloudformation/*.yml",
+            --   --   "**/*.cf.json",
+            --   --   "**/*.cf.yml",
+            --   --   "**/*.cf.yaml",
+            --   --   "**/cloudformation.json",
+            --   --   "**/cloudformation.yml",
+            --   --   "**/cloudformation.yaml",
+            --   -- },
+            --   -- ["https://json.schemastore.org/kustomization.json"] = {
+            --   --   "**/kustomization.yaml",
+            --   --   "**/kustomization.yml",
+            --   -- },
+            -- },
             trace = { server = "debug" },
           },
         },

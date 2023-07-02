@@ -2,6 +2,7 @@ return {
   "neovim/nvim-lspconfig",
   dependencies = {
     "hrsh7th/cmp-nvim-lsp",
+    "b0o/SchemaStore.nvim",
   },
   opts = {
     -- LSP Server Settings
@@ -40,7 +41,7 @@ return {
               url = "https://www.schemastore.org/api/json/catalog.json",
             },
             schemaDownload = { enable = true },
-            schemas = {},
+            schemas = require("schemastore").yaml.schemas(),
             completion = true,
             customTags = {
               "!Ref",
