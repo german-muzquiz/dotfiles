@@ -139,21 +139,25 @@ if vim.fn.has("nvim-0.9.0") == 1 then
 end
 
 -- -- floating terminal
-map("n", "<leader>ft", "<cmd>ToggleTerm<CR>", { desc = "Terminal (root dir)" })
-map("n", "<c-/>", "<cmd>ToggleTerm<CR>", { desc = "Terminal (root dir)" })
--- map("n", "<leader>fT", function() Util.float_term() end, { desc = "Terminal (cwd)" })
--- map("n", "<c-/>", lazyterm, { desc = "Terminal (root dir)" })
--- map("n", "<c-_>", lazyterm, { desc = "which_key_ignore" })
+vim.keymap.del("n", "<c-/>")
+vim.keymap.del("n", "<c-_>")
+map("n", "<leader>ft", "<cmd>9ToggleTerm<CR>", { desc = "Terminal 1" })
+map("n", "<leader>t1", "<cmd>1ToggleTerm<CR>", { desc = "Terminal 1" })
+map("n", "<leader>t2", "<cmd>2ToggleTerm<CR>", { desc = "Terminal 2" })
+map("n", "<leader>tf", "<cmd>9ToggleTerm direction=float<CR>", { desc = "Floating terminal" })
+map("n", "<leader>tt", "<cmd>ToggleTermToggleAll<cr>", { desc = "Toggle all terminals" })
+map("n", "<c-_>", "<cmd>close<cr>", { desc = "Close terminal" })
 --
 -- -- Terminal Mappings
 vim.keymap.del("t", "<esc><esc>")
+vim.keymap.del("t", "<c-/>")
+vim.keymap.del("t", "<c-_>")
 map("t", "<C-p>", "<c-\\><c-n>", { desc = "Enter Normal Mode" })
 map("t", "<C-h>", "<cmd>wincmd h<cr>", { desc = "Go to left window" })
 map("t", "<C-j>", "<cmd>wincmd j<cr>", { desc = "Go to lower window" })
 map("t", "<C-k>", "<cmd>wincmd k<cr>", { desc = "Go to upper window" })
 map("t", "<C-l>", "<cmd>wincmd l<cr>", { desc = "Go to right window" })
-map("t", "<C-/>", "<cmd>close<cr>", { desc = "Hide Terminal" })
-map("t", "<c-_>", "<cmd>close<cr>", { desc = "which_key_ignore" })
+map("t", "<c-_>", "<cmd>close<cr>", { desc = "Close terminal" })
 
 -- windows
 map("n", "<leader>ww", "<C-W>p", { desc = "Other window", remap = true })
