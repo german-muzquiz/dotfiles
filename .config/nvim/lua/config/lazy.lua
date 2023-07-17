@@ -2,7 +2,8 @@ local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
   -- bootstrap lazy.nvim
   -- stylua: ignore
-  vim.fn.system({ "git", "clone", "--filter=blob:none", "https://github.com/folke/lazy.nvim.git", "--branch=stable", lazypath })
+  vim.fn.system({ "git", "clone", "--filter=blob:none", "https://github.com/folke/lazy.nvim.git", "--branch=stable",
+    lazypath })
 end
 vim.opt.rtp:prepend(vim.env.LAZY or lazypath)
 
@@ -13,6 +14,8 @@ require("lazy").setup({
     -- import any extras modules here
     -- { import = "lazyvim.plugins.extras.lang.typescript" },
     { import = "lazyvim.plugins.extras.lang.json" },
+    { import = "lazyvim.plugins.extras.lang.go" },
+    { import = "lazyvim.plugins.extras.lang.python" },
     -- { import = "lazyvim.plugins.extras.ui.mini-animate" },
     -- import/override with your plugins
     { import = "lazyvim.plugins.extras.util.project" },
@@ -32,14 +35,14 @@ require("lazy").setup({
     colorscheme = { "catpuccin", "habamax" },
   },
   checker = {
-    enabled = false, -- automatically check for plugin updates
+    enabled = false,   -- automatically check for plugin updates
     concurrency = nil, -- @type number? set to 1 to check for updates very slowly
-    notify = true, -- get a notification when new updates are found
-    frequency = 3600, -- check for updates every hour
+    notify = true,     -- get a notification when new updates are found
+    frequency = 3600,  -- check for updates every hour
   },
   change_detection = {
     enabled = false, -- automatically check for config file changes and reload the ui
-    notify = true, -- get a notification when changes are found
+    notify = true,   -- get a notification when changes are found
   },
   performance = {
     rtp = {

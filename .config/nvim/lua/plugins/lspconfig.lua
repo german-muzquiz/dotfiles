@@ -2,9 +2,9 @@ return {
   "neovim/nvim-lspconfig",
   dependencies = {
     "hrsh7th/cmp-nvim-lsp",
-    "b0o/SchemaStore.nvim",
   },
   opts = {
+    autoformat = false,
     -- LSP Server Settings
     ---@type lspconfig.options
     servers = {
@@ -26,46 +26,7 @@ return {
           },
         },
       },
-      yamlls = {
-        flags = {
-          debounce_text_changes = 150,
-        },
-        settings = {
-          redhat = { telemetry = { enabled = false } },
-          yaml = {
-            validate = true,
-            format = { enable = true },
-            hover = true,
-            schemaStore = {
-              enable = true,
-              url = "https://www.schemastore.org/api/json/catalog.json",
-            },
-            schemaDownload = { enable = true },
-            schemas = require("schemastore").yaml.schemas(),
-            completion = true,
-            customTags = {
-              "!Ref",
-              "!Ref Scalar",
-              "!fn",
-              "!And",
-              "!Not",
-              "!If",
-              "!Equals",
-              "!Or",
-              "!FindInMap sequence",
-              "!Base64",
-              "!Cidr",
-              "!Sub",
-              "!GetAtt",
-              "!GetAZs",
-              "!ImportValue",
-              "!Select",
-              "!Split",
-              "!Join sequence",
-            },
-          },
-        },
-      },
+      yamlls = {},
       groovyls = {
         filetypes = { "Jenkinsfile", "groovy" },
         cmd = {

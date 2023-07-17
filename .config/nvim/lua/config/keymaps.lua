@@ -145,6 +145,7 @@ map("n", "<leader>ft", "<cmd>9ToggleTerm<CR>", { desc = "Terminal 1" })
 map("n", "<leader>t1", "<cmd>1ToggleTerm<CR>", { desc = "Terminal 1" })
 map("n", "<leader>t2", "<cmd>2ToggleTerm<CR>", { desc = "Terminal 2" })
 map("n", "<leader>tf", "<cmd>9ToggleTerm direction=float<CR>", { desc = "Floating terminal" })
+map("n", "<c-\\>", "<cmd>9ToggleTerm direction=float<CR>", { desc = "Floating terminal" })
 map("n", "<leader>tt", "<cmd>ToggleTermToggleAll<cr>", { desc = "Toggle all terminals" })
 map("n", "<c-_>", "<cmd>close<cr>", { desc = "Close terminal" })
 --
@@ -157,7 +158,7 @@ map("t", "<C-h>", "<cmd>wincmd h<cr>", { desc = "Go to left window" })
 map("t", "<C-j>", "<cmd>wincmd j<cr>", { desc = "Go to lower window" })
 map("t", "<C-k>", "<cmd>wincmd k<cr>", { desc = "Go to upper window" })
 map("t", "<C-l>", "<cmd>wincmd l<cr>", { desc = "Go to right window" })
-map("t", "<c-_>", "<cmd>close<cr>", { desc = "Close terminal" })
+map("t", "<c-\\>", "<cmd>close<cr>", { desc = "Close terminal" })
 
 -- windows
 map("n", "<leader>ww", "<C-W>p", { desc = "Other window", remap = true })
@@ -174,3 +175,10 @@ map("n", "<leader><tab><tab>", "<cmd>tabnew<cr>", { desc = "New Tab" })
 map("n", "<leader><tab>]", "<cmd>tabnext<cr>", { desc = "Next Tab" })
 map("n", "<leader><tab>d", "<cmd>tabclose<cr>", { desc = "Close Tab" })
 map("n", "<leader><tab>[", "<cmd>tabprevious<cr>", { desc = "Previous Tab" })
+
+-- codeium
+map('i', '<C-q>', function() return vim.fn['codeium#Accept']() end, { expr = true, desc = "Codeium accept suggestion"})
+map('i', '<C-s>', function() return vim.fn['codeium#CycleCompletions'](1) end, { expr = true, desc = "Codeium next suggestion"})
+map('i', '<C-a>', function() return vim.fn['codeium#CycleCompletions'](-1) end, { expr = true, desc = "Codeium previous suggestion" })
+map('i', '<C-x>', function() return vim.fn['codeium#Clear']() end, { expr = true, desc = "Codeium clear" })
+

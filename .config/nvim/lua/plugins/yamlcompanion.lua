@@ -29,7 +29,8 @@ return {
       schemas = {
         {
           name = "Kubernetes 1.22.4",
-          uri = "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.22.4-standalone-strict/all.json",
+          uri =
+          "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.22.4-standalone-strict/all.json",
         },
         {
           name = "GitHub workflow",
@@ -60,27 +61,20 @@ return {
             format = { enable = true },
             hover = true,
             schemaStore = {
-              enable = true,
-              url = "https://www.schemastore.org/api/json/catalog.json",
+              enable = false,
+              -- url = "https://www.schemastore.org/api/json/catalog.json",
             },
             schemaDownload = { enable = true },
-            schemas = require("schemastore").yaml.schemas(),
-            -- schemas = {
-            --   -- ["https://raw.githubusercontent.com/awslabs/goformation/master/schema/cloudformation.schema.json"] = {
-            --   --   "**/cloudformation/*.yaml",
-            --   --   "**/cloudformation/*.yml",
-            --   --   "**/*.cf.json",
-            --   --   "**/*.cf.yml",
-            --   --   "**/*.cf.yaml",
-            --   --   "**/cloudformation.json",
-            --   --   "**/cloudformation.yml",
-            --   --   "**/cloudformation.yaml",
-            --   -- },
-            --   -- ["https://json.schemastore.org/kustomization.json"] = {
-            --   --   "**/kustomization.yaml",
-            --   --   "**/kustomization.yml",
-            --   -- },
-            -- },
+            schemas = require('schemastore').yaml.schemas {
+              extra = {
+                {
+                  description = 'AWS CloudFormation manually set',
+                  fileMatch = '**/cloudformation/*.yaml',
+                  name = 'AWS CloudFormation overriden',
+                  url = 'https://raw.githubusercontent.com/awslabs/goformation/master/schema/cloudformation.schema.json',
+                },
+              },
+            },
             completion = true,
             customTags = {
               "!Ref",

@@ -24,13 +24,17 @@ return {
               hint = icons.diagnostics.Hint,
             },
           },
-          { "filetype", icon_only = true, separator = "", padding = { left = 1, right = 0 } },
-          { "filename", path = 1, symbols = { modified = "  ", readonly = "", unnamed = "" } },
             -- stylua: ignore
             {
-              function() return require("nvim-navic").get_location() end,
-              cond = function() return package.loaded["nvim-navic"] and require("nvim-navic").is_available() end,
+              function() return vim.fn.getcwd() end,
+              color = Util.fg("Directory"),
             },
+          { "filename", path = 1, symbols = { modified = "+", readonly = "", unnamed = "" } },
+            -- stylua: ignore
+            -- {
+            --   function() return require("nvim-navic").get_location() end,
+            --   cond = function() return package.loaded["nvim-navic"] and require("nvim-navic").is_available() end,
+            -- },
         },
         lualine_x = {
             -- stylua: ignore
@@ -50,8 +54,7 @@ return {
             },
             -- stylua: ignore
             {
-              function() return require("noice").api.status.command.get() end,
-              cond = function() return package.loaded["noice"] and require("noice").api.status.command.has() end,
+              function() return 'codeium:' .. vim.fn['codeium#GetStatusString']() end,
               color = Util.fg("Statement"),
             },
             -- stylua: ignore
