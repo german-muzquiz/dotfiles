@@ -30,28 +30,8 @@ return {
               color = Util.fg("Directory"),
             },
           { "filename", path = 1, symbols = { modified = "+", readonly = "", unnamed = "" } },
-            -- stylua: ignore
-            -- {
-            --   function() return require("nvim-navic").get_location() end,
-            --   cond = function() return package.loaded["nvim-navic"] and require("nvim-navic").is_available() end,
-            -- },
         },
         lualine_x = {
-            -- stylua: ignore
-            {
-              function()
-                local schema = require("config.yaml_schemas").current_schema(0)
-                if schema.uri == "none" then
-                    return ""
-                end
-                if schema.name then
-                  return schema.name
-                else
-                  return ".." .. schema.uri:sub(-50)
-                end
-              end,
-              color = Util.fg("Statement"),
-            },
             -- stylua: ignore
             {
               function() return 'codeium:' .. vim.fn['codeium#GetStatusString']() end,

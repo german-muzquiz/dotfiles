@@ -26,7 +26,24 @@ return {
           },
         },
       },
-      yamlls = {},
+      yamlls = {
+        filetypes = { "yaml", "yaml.cloudformation" },
+        settings = {
+          redhat = { telemetry = { enabled = false } },
+          yaml = {
+            validate = true,
+            format = { enable = true },
+            hover = true,
+            schemaStore = {
+              enable = false,
+              url = "https://www.schemastore.org/api/json/catalog.json",
+            },
+            schemaDownload = { enable = true },
+            schemas = {},
+            completion = true,
+          },
+        },
+      },
       groovyls = {
         filetypes = { "Jenkinsfile", "groovy" },
         cmd = {
