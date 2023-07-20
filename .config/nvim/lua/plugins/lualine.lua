@@ -26,7 +26,16 @@ return {
           },
             -- stylua: ignore
             {
-              function() return vim.fn.getcwd() end,
+              function()
+                -- get the last word of the current working directory
+                local index = string.find(vim.fn.getcwd(), "/[^/]*$") + 1
+                local prefix = ''
+                if require('config.project').has_venv then
+                    prefix = '(venv) '
+                end
+                local dir = vim.fn.getcwd():sub(index)
+                return prefix .. dir
+              end,
               color = Util.fg("Directory"),
             },
           { "filename", path = 1, symbols = { modified = "+", readonly = "", unnamed = "" } },
