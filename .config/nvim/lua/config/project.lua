@@ -9,9 +9,9 @@ M.detect_venv = function()
     elseif io.open(vim.fn.getcwd() .. '/.venv/bin/python', "r") ~= nil then
         venv_path = vim.fn.getcwd() .. '/.venv/bin/python'
     end
-    if venv_path == nil then
+    if venv_path == '' then
         M.has_venv = false
-        return
+        return nil
     end
     M.has_venv = true
     return venv_path

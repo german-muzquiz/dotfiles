@@ -51,7 +51,7 @@ return {
                 "shellcheck",
                 "shfmt",
                 "flake8",
-                "pylsp",
+                "pyright",
             },
             automatic_installation = true,
         })
