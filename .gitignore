@@ -1,5 +1,7 @@
 .vim/swap
 .vim/bundle
+.vim/plugged
 .config/nvim/backup
 .config/nvim/swap
+**/.DS_Store
 
