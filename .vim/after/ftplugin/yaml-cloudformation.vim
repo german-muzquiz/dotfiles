@@ -6,7 +6,7 @@ setlocal expandtab
 setlocal autoindent
 
 let b:schema = 'https://raw.githubusercontent.com/awslabs/goformation/master/schema/cloudformation.schema.json'
-compiler check-jsonschema_yaml
+compiler yamlschema
 
 nnoremap <buffer> <leader>x :Make<CR>
 

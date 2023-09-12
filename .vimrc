@@ -36,7 +36,11 @@ Plug 'haishanh/night-owl.vim' 		                "Color scheme
 Plug 'jacoborus/tender.vim'
 Plug 'jnurmine/Zenburn'
 Plug 'sonph/onehalf' 		                "Color scheme
+Plug 'veloce/vim-aldmeris' 		                "Color scheme
+Plug 'EdenEast/nightfox.nvim' 		                "Color scheme
 Plug 'tomasr/molokai' 		                "Color scheme
+Plug 'lodestone/lodestone.vim' 		                "Color scheme
+Plug 'zeis/vim-kolor' 		                "Color scheme
 Plug 'dracula/vim' 		                "Color scheme
 Plug 'morhetz/gruvbox' 		                "Color scheme
 Plug 'preservim/nerdtree'                           "File explorer
@@ -48,9 +52,11 @@ Plug 'junegunn/fzf', { 'do': { -> fzf#install() } } "Fuzzy file finder
 Plug 'junegunn/fzf.vim'
 "Plug 'vim-scripts/AutoComplPop'                     "Automatically show vim's complete menu while typing
 Plug 'ludovicchabant/vim-gutentags'
-Plug 'davidhalter/jedi-vim'
+"Plug 'davidhalter/jedi-vim'
 Plug 'Konfekt/vim-compilers'
 Plug 'tpope/vim-dispatch'
+Plug 'lifepillar/vim-mucomplete'
+Plug 'Exafunction/codeium.vim'
 
 
 " Initialize plugin system
@@ -58,8 +64,13 @@ call plug#end()
 
 "------------------------------------------------ Colors -------------------------------------------
 set termguicolors
-colorscheme dracula
-hi QuickFixLine guifg=#fefefe
+"colorscheme dracula
+"hi QuickFixLine guifg=#fefefe
+
+colorscheme nightfox
+hi CursorLine term=NONE cterm=NONE
+hi CursorLineNr term=NONE cterm=NONE
+
 let g:airline_theme='deus'
 let g:airline_detect_modified=1
 let g:airline#extensions#whitespace#enabled = 0
@@ -124,6 +135,7 @@ set splitright
 set diffopt+=vertical   "Always use vertical diffs
 set backspace=indent,eol,start "Make basckspace work as itended in insert mode
 set signcolumn=yes
+set timeoutlen=1000
 
 "------------------------------------------------ Custom keybindings -------------------------------------------
 let mapleader="\<Space>"
@@ -142,7 +154,6 @@ nnoremap <S-Left> :vertical resize -2<cr>
 nnoremap <S-Right> :vertical resize +2<cr>
 
 " Hide search highlights
-nnoremap <esc> :noh<cr>
 nnoremap <leader>qq :qa<cr>
 " Format all
 nnoremap <Leader>l :syntax off<CR> gg=G :syntax on<CR>
@@ -156,7 +167,7 @@ nnoremap <leader>\| :vsplit<cr>
 nnoremap <leader>- :split<cr>
 " Find in files
 "nnoremap <Leader>f :vimgrep //j **<left><left><left><left><left>
-nnoremap <leader>/ :Rg!
+nnoremap <leader>/ :Rg! 
 " Load commit history of current file
 "nnoremap <Leader>h :Gclog! -- %<CR>
 nnoremap <Leader>h :BCommits!<CR>
@@ -166,6 +177,7 @@ nnoremap <Leader>gs :Git<CR>
 nnoremap <Leader>gP :Git push<CR>
 " Pull
 nnoremap <Leader>gp :Git pull<CR>
+nnoremap <Leader>gd :Gdiffsplit<CR>
 " Navigate the complete menu items like CTRL+n / CTRL+p would
 "inoremap <expr> <Down> pumvisible() ? "<C-n>" :"<Down>"
 inoremap <expr> <TAB> pumvisible() ? "<C-n>" :"<TAB>"
@@ -185,6 +197,9 @@ nnoremap <leader>x :Make %<CR>
 nnoremap ]x :cnext<CR>
 nnoremap [x :cprev<CR>
 nnoremap <Leader>o <C-w>o
+
+imap <c-j> <plug>(MUcompleteFwd)
+imap <c-k> <plug>(MUcompleteBwd)
 
 "Close some buffers just with pressing q
 autocmd FileType help,fugitive,rst,qf,vim-plug nnoremap <buffer><nowait> q :q<CR>
@@ -218,12 +233,15 @@ let g:loaded_netrwSettings = 1
 let g:loaded_netrwFileHandlers = 1
 
 let NERDTreeWinSize=45
-nnoremap <Leader>e :NERDTreeToggle<CR>
-"nnoremap <Leader>e :NERDTreeFind<CR>
+let NERDTreeShowHidden=1
+"nnoremap <Leader>e :NERDTreeToggle<CR>
+nnoremap <Leader>e :NERDTreeFind<CR>
 
 " -------------------------------- Signify --------------------------------
 let g:signify_realtime = 1
 
+
+let $FZF_DEFAULT_COMMAND = 'find . -path "./.git" -prune -o -print'
 
 " ---------------------------------- FZF ----------------------------------
 " Customize fzf colors to match your color scheme
@@ -261,7 +279,11 @@ let g:gutentags_ctags_exclude = [
             \ '*.git',
             \ ]
 
-let g:jedi#show_call_signatures = "1"
+"let g:jedi#show_call_signatures = "1"
+
+let g:mucomplete#enable_auto_at_startup = 1
+let g:mucomplete#no_mappings = 1
+
 
 " ------------------------------ My custom help -----------------------------
 
