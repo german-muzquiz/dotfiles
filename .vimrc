@@ -50,12 +50,13 @@ Plug 'vim-airline/vim-airline'                      "Status line
 Plug 'vim-airline/vim-airline-themes'               "Status line themes
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } } "Fuzzy file finder
 Plug 'junegunn/fzf.vim'
-"Plug 'vim-scripts/AutoComplPop'                     "Automatically show vim's complete menu while typing
 Plug 'ludovicchabant/vim-gutentags'
-"Plug 'davidhalter/jedi-vim'
+Plug 'davidhalter/jedi-vim'
 Plug 'Konfekt/vim-compilers'
 Plug 'tpope/vim-dispatch'
 Plug 'lifepillar/vim-mucomplete'
+Plug 'dominikduda/vim_current_word'
+Plug 'vim-autoformat/vim-autoformat'
 Plug 'Exafunction/codeium.vim'
 
 
@@ -70,6 +71,9 @@ set termguicolors
 colorscheme nightfox
 hi CursorLine term=NONE cterm=NONE
 hi CursorLineNr term=NONE cterm=NONE
+
+hi CurrentWord guibg=#4b3b51 cterm=NONE
+hi CurrentWordTwins guibg=#4b3b51 cterm=NONE
 
 let g:airline_theme='deus'
 let g:airline_detect_modified=1
@@ -153,6 +157,8 @@ nnoremap <S-Down> :resize -2<cr>
 nnoremap <S-Left> :vertical resize -2<cr>
 nnoremap <S-Right> :vertical resize +2<cr>
 
+nnoremap <Esc><Esc> :noh<Esc><cr>
+
 " Hide search highlights
 nnoremap <leader>qq :qa<cr>
 " Format all
@@ -191,6 +197,7 @@ inoremap <expr> <CR> pumvisible() ? "<C-y>" :"<CR>"
 nnoremap <Leader>t :terminal ++curwin<cr>
 tmap <C-n> <C-w>N
 tmap <C-p> <C-w>"0
+nnoremap <Leader>cf :Autoformat<CR>
 
 nnoremap q: <nop>
 nnoremap <leader>x :Make %<CR>
@@ -227,15 +234,20 @@ augroup END
 
 " -------------------------------- NERDTree -------------------------------
 " Disable eetrw.
-let g:loaded_netrw  = 1
-let g:loaded_netrwPlugin = 1
-let g:loaded_netrwSettings = 1
-let g:loaded_netrwFileHandlers = 1
+"let g:loaded_netrw  = 1
+"let g:loaded_netrwPlugin = 1
+"let g:loaded_netrwSettings = 1
+"let g:loaded_netrwFileHandlers = 1
 
 let NERDTreeWinSize=45
 let NERDTreeShowHidden=1
 "nnoremap <Leader>e :NERDTreeToggle<CR>
 nnoremap <Leader>e :NERDTreeFind<CR>
+
+
+let g:autoformat_autoindent = 0
+let g:autoformat_retab = 0
+let g:autoformat_remove_trailing_spaces = 0
 
 " -------------------------------- Signify --------------------------------
 let g:signify_realtime = 1
