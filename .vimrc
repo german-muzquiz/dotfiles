@@ -51,13 +51,15 @@ Plug 'vim-airline/vim-airline-themes'               "Status line themes
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } } "Fuzzy file finder
 Plug 'junegunn/fzf.vim'
 Plug 'ludovicchabant/vim-gutentags'
-Plug 'davidhalter/jedi-vim'
+"Plug 'davidhalter/jedi-vim'
 Plug 'Konfekt/vim-compilers'
 Plug 'tpope/vim-dispatch'
-Plug 'lifepillar/vim-mucomplete'
+Plug 'vim-scripts/AutoComplPop'
 Plug 'dominikduda/vim_current_word'
 Plug 'vim-autoformat/vim-autoformat'
+Plug 'kg8m/vim-fzf-tjump'
 Plug 'Exafunction/codeium.vim'
+
 
 
 " Initialize plugin system
@@ -157,7 +159,7 @@ nnoremap <S-Down> :resize -2<cr>
 nnoremap <S-Left> :vertical resize -2<cr>
 nnoremap <S-Right> :vertical resize +2<cr>
 
-nnoremap <Esc><Esc> :noh<Esc><cr>
+nnoremap <Esc><Esc> :noh<cr><Esc>
 
 " Hide search highlights
 nnoremap <leader>qq :qa<cr>
@@ -198,19 +200,27 @@ nnoremap <Leader>t :terminal ++curwin<cr>
 tmap <C-n> <C-w>N
 tmap <C-p> <C-w>"0
 nnoremap <Leader>cf :Autoformat<CR>
+nnoremap <Leader><Leader> :Files<CR>
+
+nnoremap <C-]> :Tjump<cr>
+inoremap <C-]> <Esc>:Tjump<cr>
 
 nnoremap q: <nop>
 nnoremap <leader>x :Make %<CR>
-nnoremap ]x :cnext<CR>
+    nnoremap ]x :cnext<CR>
 nnoremap [x :cprev<CR>
 nnoremap <Leader>o <C-w>o
 
 imap <c-j> <plug>(MUcompleteFwd)
 imap <c-k> <plug>(MUcompleteBwd)
 
+imap <script><silent><nowait><expr> <C-q> codeium#Accept()
+imap <C-;>   <Cmd>call codeium#CycleCompletions(1)<CR>
+imap <C-,>   <Cmd>call codeium#CycleCompletions(-1)<CR>
+imap <C-x>   <Cmd>call codeium#Clear()<CR>
+
 "Close some buffers just with pressing q
 autocmd FileType help,fugitive,rst,qf,vim-plug nnoremap <buffer><nowait> q :q<CR>
-
 
 
 " Remember last position in file
@@ -245,17 +255,19 @@ let NERDTreeShowHidden=1
 nnoremap <Leader>e :NERDTreeFind<CR>
 
 
-let g:autoformat_autoindent = 0
-let g:autoformat_retab = 0
-let g:autoformat_remove_trailing_spaces = 0
+let g:autoformat_autoindent = 1
+let g:autoformat_retab = 1
+let g:autoformat_remove_trailing_spaces = 1
+let g:autoformat_verbosemode=1
 
 " -------------------------------- Signify --------------------------------
 let g:signify_realtime = 1
 
+let g:acp_completeoptPreview = 0
 
-let $FZF_DEFAULT_COMMAND = 'find . -path "./.git" -prune -o -print'
 
 " ---------------------------------- FZF ----------------------------------
+let $FZF_DEFAULT_COMMAND = 'find . -path "./.git" -prune -o -print'
 " Customize fzf colors to match your color scheme
 " - fzf#wrap translates this to a set of `--color` options
 let g:fzf_colors =
@@ -273,6 +285,8 @@ let g:fzf_colors =
             \ 'spinner': ['fg', 'Label'],
             \ 'header':  ['fg', 'Comment'] }
 
+
+let g:codeium_disable_bindings = 1
 
 
 " ------------------------------ gutentags -----------------------------
@@ -293,8 +307,10 @@ let g:gutentags_ctags_exclude = [
 
 "let g:jedi#show_call_signatures = "1"
 
-let g:mucomplete#enable_auto_at_startup = 1
+let g:mucomplete#enable_auto_at_startup = 0
 let g:mucomplete#no_mappings = 1
+"let g:mucomplete#completion_delay = 500
+
 
 
 " ------------------------------ My custom help -----------------------------
