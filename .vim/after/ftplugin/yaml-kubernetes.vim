@@ -8,5 +8,4 @@ setlocal autoindent
 let b:schema = 'https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.22.4-standalone-strict/all.json'
 compiler yamlschema
 
-nnoremap <buffer> <leader>x :Make<CR>
-
+call tcomment#type#Define('yaml-kubernetes', '# %s')

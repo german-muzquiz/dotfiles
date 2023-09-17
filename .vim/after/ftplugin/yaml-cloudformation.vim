@@ -8,5 +8,4 @@ setlocal autoindent
 let b:schema = 'https://raw.githubusercontent.com/awslabs/goformation/master/schema/cloudformation.schema.json'
 compiler yamlschema
 
-nnoremap <buffer> <leader>x :Make<CR>
-
+call tcomment#type#Define('yaml-cloudformation', '# %s')

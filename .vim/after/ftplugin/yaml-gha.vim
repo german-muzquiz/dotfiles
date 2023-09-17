@@ -8,5 +8,4 @@ setlocal autoindent
 let b:schema = 'https://raw.githubusercontent.com/SchemaStore/schemastore/master/src/schemas/json/github-workflow.json'
 compiler yamlschema
 
-nnoremap <buffer> <leader>x :Make<CR>
-
+call tcomment#type#Define('yaml-gha', '# %s')
