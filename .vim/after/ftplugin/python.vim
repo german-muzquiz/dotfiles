@@ -25,4 +25,6 @@ function! RunPythonFile(filename)
 endfunction
 
 " Mapping for running the current file
-nnoremap <leader>r :call RunPythonFile(expand('%'))<cr>
+nnoremap <buffer> <leader>r :call RunPythonFile(expand('%'))<cr>
+" Mapping for installing the python dependencies in the virtualenv
+nnoremap <buffer> <leader>r :call VenvInstallRequirements()<cr>

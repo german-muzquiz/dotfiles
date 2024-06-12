@@ -18,4 +18,4 @@ function! SqlRunInEnv()
     ":%DB connstring
 endfunction
 
-nnoremap <leader>r :call SqlRunInEnv()<cr>
+nnoremap <buffer> <leader>r :call SqlRunInEnv()<cr>
