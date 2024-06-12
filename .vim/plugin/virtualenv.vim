@@ -1,6 +1,6 @@
 " Activate python virtual environments automatically
 
-command! -nargs=? VenvInstallRequirements call s:install_requirements()
+command! -nargs=? VenvInstallRequirements call s:install_requirements('')
 command! -nargs=? VenvCreate call s:create_venv()
 
 let g:gervirtualenvstatus_prev_return = ''

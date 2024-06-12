@@ -159,6 +159,8 @@ nnoremap <leader><leader> :Files<CR>
 nnoremap <leader>fb :Buffers<CR>
 " Fuzzy find tags
 nnoremap <leader>ft :Tags<CR>
+" Grep word under cursor
+nnoremap <leader>fw :call GrepWord()<CR>
 " Go back to previous buffer
 nnoremap <leader>bb :b #<cr>
 " Find in files
@@ -203,9 +205,12 @@ tmap <C-b> <C-w>:call TerminalSwitch()<cr>
 "---- Code goodies
 nnoremap <Leader>cf :Autoformat<CR>
 nnoremap <leader>cl :Make %<CR>
-nnoremap <leader>pr :AsyncTask project-run<CR>
 nnoremap <C-]> :Tags <c-r>=expand("<cword>")<cr><cr>
 inoremap <C-]> <Esc>:Tags<cr>
+
+" Run things
+nnoremap <leader>rt :AsyncTaskFzf<cr>
+nnoremap <leader>rp :AsyncTask project-run<CR>
 
 nnoremap ]q :execute "try\n    cnext\ncatch\ncfirst\ncatch\nendtry"<CR>
 nnoremap [q :cprev<CR>
@@ -298,6 +303,7 @@ let g:gutentags_ctags_extra_args = [
 let g:gutentags_ctags_exclude = [
             \ '*.git',
             \ '*.mypy_cache',
+            \ '*build',
             \ '*.json',
             \ ]
 "let g:gutentags_trace = 1

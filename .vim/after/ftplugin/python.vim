@@ -12,7 +12,7 @@ compiler pylintmypy
 
 autocmd BufEnter <buffer> call VirtualEnvActivate('')
 
-function! RunPythonFile(filename)
+function! PythonRunFile(filename)
     echom a:filename
     " extract the base name of the file
     let base = fnamemodify(a:filename, ':t:r')
@@ -25,6 +25,4 @@ function! RunPythonFile(filename)
 endfunction
 
 " Mapping for running the current file
-nnoremap <buffer> <leader>r :call RunPythonFile(expand('%'))<cr>
-" Mapping for installing the python dependencies in the virtualenv
-nnoremap <buffer> <leader>r :call VenvInstallRequirements()<cr>
+nnoremap <buffer> <leader>rf :call PythonRunFile(expand('%'))<cr>
